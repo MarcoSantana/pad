@@ -6,6 +6,7 @@
     - [ ] Add button functionality
   - [ ] Add row with the register button option
     - [ ] Add button functionality
+  - [ ] Move LoginPage class to `login.dart`
   - [X] Add logo widget (svg support and unsplashed)
   - [X] Create the email and password fields
   - [X] Extract the login form to its own file / class

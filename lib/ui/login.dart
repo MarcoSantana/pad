@@ -64,6 +64,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           TextButton(
+            key: Key('signInButton'),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith(
                   (Set<MaterialState> states) {
@@ -79,7 +80,7 @@ class _LoginFormState extends State<LoginForm> {
               }),
             ),
             onPressed: _formProgress == 1 ? _processLoginForm : null,
-            child: Text('Ingreso'),
+            child: Text('Ingresar'),
           ),
         ],
       ),

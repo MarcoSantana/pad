@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pad/ui/login.dart';
 
-void main() => runApp(SignUpApp());
+void main() => runApp(PadApp());
 
-class SignUpApp extends StatelessWidget {
+class PadApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,7 +46,10 @@ class LoginScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   child: TextButton(
-                    onPressed: () {},
+                    key: Key('signInButton'),
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/welcome');
+                    },
                     child: Text(
                       'No tengo una cuenta',
                     ),
