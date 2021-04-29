@@ -6,17 +6,15 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final _firstNameTextController = TextEditingController();
-  final _lastNameTextController = TextEditingController();
-  final _usernameTextController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   double _formProgress = 0;
   void _updateFormProgress() {
     double progress = 0.0;
     final controllers = [
-      _firstNameTextController,
-      _lastNameTextController,
-      _usernameTextController
+      _emailController,
+      _passwordController,
     ];
 
     for (var controller in controllers) {
@@ -30,9 +28,12 @@ class _LoginFormState extends State<LoginForm> {
     });
   }
 
+  final _loginFormKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _loginFormKey,
       onChanged: _updateFormProgress,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -42,25 +43,28 @@ class _LoginFormState extends State<LoginForm> {
           Padding(
             padding: EdgeInsets.all(8.0),
             child: TextFormField(
-              controller: _firstNameTextController,
-              decoration: InputDecoration(hintText: 'First name'),
+              validator: (email) {
+                bool emailValid = RegExp(
+                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                    .hasMatch(email!);
+
+                if (!emailValid) {
+                  return 'Debe ser una dirección de correo válida';
+                }
+              },
+              controller: _emailController,
+              decoration: InputDecoration(hintText: 'Correo electrónico'),
             ),
           ),
           Padding(
             padding: EdgeInsets.all(8.0),
             child: TextFormField(
-              controller: _lastNameTextController,
-              decoration: InputDecoration(hintText: 'Last name'),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _usernameTextController,
-              decoration: InputDecoration(hintText: 'Username'),
+              controller: _passwordController,
+              decoration: InputDecoration(hintText: 'Contraseña'),
             ),
           ),
           TextButton(
+            key: Key('signInButton'),
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.resolveWith(
                   (Set<MaterialState> states) {
@@ -75,13 +79,24 @@ class _LoginFormState extends State<LoginForm> {
                     : Colors.indigo.shade400;
               }),
             ),
-            onPressed: _formProgress == 1 ? _showWelcomeScreen : null,
-            child: Text('Ingreso'),
+            onPressed: _formProgress == 1 ? _processLoginForm : null,
+            child: Text('Ingresar'),
           ),
         ],
       ),
     );
   }
+
+  void _processLoginForm() {
+    // here we must make validations and eventually call the show welcome screen
+    if (_loginFormKey.currentState!.validate()) {
+      // If the form is valid, display a snackbar. In the real world,
+      // you'd often call a server or save the information in a database.
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Processing Data')));
+      if (_formProgress == 1) _showWelcomeScreen();
+    }
+  } // _processLoginForm
 
   void _showWelcomeScreen() {
     Navigator.of(context).pushNamed('/welcome');
